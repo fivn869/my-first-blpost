@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>login</title>
+    <style>
+                #edit-area{
+            width: 50%;
+            margin: 0 auto;
+            margin-top: 25%;
+        }
+        input {
+            display: block;
+            width: 100%;
+        }
+        #sub1{
+            width: 70px;
+            display: inline-block;
+        }
+        #sub2{
+            width: 70px;
+            display: inline-block;
+        }
+
+
+    </style>
+</head>
+<body>
+
+
+<div>
+   <form id="edit-area" action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+        {% if error %}
+        <a style="color: red">{{ error }}</a>
+        {% endif %}
+    <input name="username" type="text" placeholder="username" required/>
+    <input name="password" type="password" placeholder="password" required/>
+    <input id="sub1" type="submit" value="submit">
+    <input id="sub2" type="button" value="register" onclick="location.href='{% url "register" %}' ">
+
+
+</form>
+</div>
+
+
+</body>
+</html>

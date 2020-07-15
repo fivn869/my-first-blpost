@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <style>
+        input{
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+{% if user.is_authenticated %}
+<div>
+    <form action="{% url 'blog' %}" method="post">
+    {% csrf_token %}
+    {% for item in form %}
+    <div>{{ item }}</div>
+    {% endfor %}
+    <input type="submit" value="submit">
+</form>
+</div>
+{% else %}
+    <a href='{% url "login" %}'>You must log in</a>
+{% endif %}
+
+</body>
+</html>

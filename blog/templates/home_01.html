@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Add a gray background color with some padding */
+body {
+  font-family: Arial;
+  padding: 20px;
+  background: #f1f1f1;
+}
+
+/* Header/Blog Title */
+.header {
+  padding: 30px;
+  font-size: 40px;
+  text-align: center;
+  background: yellowgreen;
+}
+
+/* Create two unequal columns that floats next to each other */
+/* Left column */
+.leftcolumn {
+  float: left;
+  width: 75%;
+}
+
+/* Right column */
+.rightcolumn {
+  float: left;
+  width: 25%;
+  padding-left: 20px;
+}
+
+/* Fake image */
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 2px;
+}
+#form{
+    float: right;
+    width: 100%;
+}
+
+
+/* Add a card effect for articles */
+.card {
+   background-color: wheat;
+   padding: 20px;
+   margin-top: 20px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+  margin-top: 20px;
+}
+#comment{
+
+}
+
+/* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 800px) {
+  .leftcolumn, .rightcolumn {
+    width: 100%;
+    padding: 0;
+  }
+}
+</style>
+</head>
+{% if user.is_authenticated %}
+<body>
+
+<div class="header">
+  <h2>Welcome back, {{ user }}!</h2>
+</div>
+
+<div class="row">
+  <div class="leftcolumn">
+     {% for post in posts %}
+      <div class="card">
+      <h2>{{ post.title }}(({{ post.pk }})):</h2><a href="{% url 'post_edit' pk=post.pk %}">Edit</a>
+      <h5>{{ post.published_date }}</h5>
+{#      <div class="fakeimg" style="height:200px;">Image</div>#}
+      <p>{{ post.blog }}</p>
+    </div>
+      {% endfor %}
+
+
+      <div id ="form" class="card">
+          <form action="{% url 'home' %}" method="post">{% csrf_token %}
+              <p>
+                  <label>Title:</label>
+                <input name ="title" id= "form_title" type="text" placeholder="title">
+              </p>
+              <p>
+                  <label>Blog:</label>
+              </p>
+              <div id="comment" >
+                  <textarea style="color: yellowgreen" placeholder="赶快发表你的见解吧！" name="comment" cols="110" rows="8" aria-required="true"></textarea>
+              </div>
+
+              <input type="submit" value="submit">
+          </form>
+      </div>
+  </div>
+  <div class="rightcolumn">
+    <div class="card">
+      <h2>{{ occupy }}</h2>
+      <img class="fakeimg" style="height: 100px;" src="static/starry.jpg">
+      <p>{{ description }}</p>
+    </div>
+    <div class="card">
+      <h3>Popular Post</h3>
+      <div class="fakeimg">Image</div><br>
+      <div class="fakeimg">Image</div><br>
+      <div class="fakeimg">Image</div>
+    </div>
+    <div class="card">
+      <h3>Follow Me</h3>
+
+    {% for info in infos %}
+        <p style="color: coral">{{ info.occupy }}({{ info.us }}) :</p>
+        <p>{{ info.description }}</p>
+        <hr>
+    {% endfor %}
+
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="{% url 'logout' %}" >lougout</a>
+</div>
+
+</body>
+{% else %}
+<body>
+<a href="{% url 'login' %}"> please click here to login</a>
+</body>
+{% endif %}
+</html>

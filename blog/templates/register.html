@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <style>
+        #edit-area{
+            width: 50%;
+            margin: 0 auto;
+            margin-top: 25%;
+        }
+        input {
+            display: block;
+            width: 100%;
+        }
+        #submit, #reset{
+            width: 65px;
+            display: inline-block;
+        }
+        #reset{
+            float:right;
+        }
+    </style>
+</head>
+<body>
+    <form id="edit-area" action="{% url 'register' %} " method="post">
+        {% csrf_token %}
+                {% if error %}
+        <a style="color: red">{{ error }}</a>
+        {% endif %}
+        <input name="username" type="text" placeholder="username"/>
+        <input name="password" type="password" placeholder="password"/>
+        <input name="check_password" type="password" placeholder="make sure password"/>
+        <input id="submit" type="submit" value="submit"/>
+        <input id="reset" type="reset" value="reset">
+
+
+    </form>
+
+</body>
+</html>
