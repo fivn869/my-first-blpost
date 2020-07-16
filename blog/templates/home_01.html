@@ -46,7 +46,9 @@ body {
     float: right;
     width: 100%;
 }
-
+#file{
+    float: right;
+}
 
 /* Add a card effect for articles */
 .card {
@@ -85,8 +87,15 @@ body {
 {% if user.is_authenticated %}
 <body>
 
-<div class="header">
-  <h2>Welcome back, {{ user }}!</h2>
+<div>
+    <div class="header">
+       <h2>Welcome back, {{ user }}!</h2>
+    </div>
+    <div id = "file">
+        <a href="{% url 'profile' %}"> click here to change your profile</a>
+    </div>
+
+
 </div>
 
 <div class="row">

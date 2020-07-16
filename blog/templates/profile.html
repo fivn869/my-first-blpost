@@ -12,7 +12,7 @@
 <body>
 {% if user.is_authenticated %}
 <div>
-    <form action="{% url 'blog' %}" method="post">
+    <form action="{% url 'profile' %}" method="post">
     {% csrf_token %}
     {% for item in form %}
     <div>{{ item }}</div>
