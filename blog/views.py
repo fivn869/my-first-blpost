@@ -37,7 +37,8 @@ class PostEdit(View):
             bpl.save()
             print("saved")
 
-            return redirect('home')
+
+            return redirect('home', page=0)
         return render(request, self.TEMPLATE)
 
 
@@ -66,7 +67,7 @@ class Post02(View):
             bpl.save()
             print("saved")
 
-            return redirect('home')
+            return redirect('home', page=0)
 
 
 
@@ -104,7 +105,8 @@ class ProfileForm(View):
                 blog = form.save(commit=False)
                 blog.us = request.user
                 blog.save()
-            return redirect('home')
+
+            return redirect('home', page=0)
 
         else:
             data['form'] = FileForm()
@@ -158,12 +160,12 @@ class Login(View):
             print("wrong")
             return redirect("/login?error= Either username or password is wrong")
 
-        return redirect('home')
+        return redirect('home', page=0)
 
 class HomePage(View):
     TEMPLATE='home_01.html'
 
-    def get(self, request):
+    def get(self, request, page):
         data = {}
         user =request.user
 
@@ -175,14 +177,30 @@ class HomePage(View):
                 data['occupy'] = des.occupy
             else:
                 data['error'] = 'please fill your own profile'
-        user_posts = Poost.objects.filter(us=request.user)
-        user_infos = Profile.objects.filter()
-        data['infos'] = user_infos
-        data['posts'] = user_posts
+            # user_posts = Poost.objects.filter(us=request.user)
+            # user_infos = Profile.objects.filter()
+            # data['infos'] = user_infos
+            # data['posts'] = user_posts
+        numbers = Poost.objects.all().count()
+        number_of_pages =int(numbers/4)
+        Postsss = Poost.objects.all()
+        count = []
+        for i in range(0,number_of_pages+1):
+            count.append(i);
+
+        begin = page*4
+        end = begin+4
+        data['infos'] = Profile.objects.all()[0:5]
+        data['posts']= Postsss[begin:end]
+        data['count'] = count
 
         return render(request, self.TEMPLATE,data)
-    def post(self, request):
-
+    def post(self, request,page):
+        print("processing the post",page)
+        user = request.user
+        if not user.is_authenticated:
+            loog = reverse('login')+"?error=please login !"
+            return redirect(loog)
         blog = request.POST.get("comment")
         title = request.POST.get("title")
         post = Poost()
@@ -191,9 +209,7 @@ class HomePage(View):
         post.blog = blog
         post.us=request.user
         post.publish()
-        print("success post!")
-
-        return redirect('home')
+        return redirect('home', page=0)
 
 
 class LogoutPage(View):

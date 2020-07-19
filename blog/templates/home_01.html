@@ -71,8 +71,21 @@ body {
   background: #ddd;
   margin-top: 20px;
 }
+#file{
+   margin:0 auto ;
+}
 #comment{
 
+}
+
+.paginator{
+    margin: 0 auto;
+}
+.input{
+	width: 100%; /*自动适应父布局宽度*/
+	overflow: auto;
+    word-break: break-all;
+    height: 200px;
 }
 
 /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
@@ -84,25 +97,37 @@ body {
 }
 </style>
 </head>
-{% if user.is_authenticated %}
 <body>
 
 <div>
     <div class="header">
-       <h2>Welcome back, {{ user }}!</h2>
+       <h2>Welcome ,
+           {% if user.is_authenticated %}
+               {{ user }}
+           {% else %}
+               passer-by
+           {% endif %}
+           !</h2>
     </div>
-    <div id = "file">
-        <a href="{% url 'profile' %}"> click here to change your profile</a>
-    </div>
+
 
 
 </div>
 
 <div class="row">
   <div class="leftcolumn">
+      {% if user.is_authenticated %}
+    <div class="filee">
+        <a href="{% url 'profile' %}"> click here to change your profile</a>
+    </div>
+    {% else %}
+        <div id = "file">
+        <a href="{% url 'login' %}"> click here to login</a>
+        </div>
+    {% endif %}
      {% for post in posts %}
       <div class="card">
-      <h2>{{ post.title }}(({{ post.pk }})):</h2><a href="{% url 'post_edit' pk=post.pk %}">Edit</a>
+      <h2>{{ post.title }} -- {{ post.pk }}:</h2><a href="{% url 'post_edit' pk=post.pk %}">Edit</a>
       <h5>{{ post.published_date }}</h5>
 {#      <div class="fakeimg" style="height:200px;">Image</div>#}
       <p>{{ post.blog }}</p>
@@ -111,7 +136,7 @@ body {
 
 
       <div id ="form" class="card">
-          <form action="{% url 'home' %}" method="post">{% csrf_token %}
+          <form action="{% url 'home' page=0 %}" method="post">{% csrf_token %}
               <p>
                   <label>Title:</label>
                 <input name ="title" id= "form_title" type="text" placeholder="title">
@@ -120,7 +145,7 @@ body {
                   <label>Blog:</label>
               </p>
               <div id="comment" >
-                  <textarea style="color: yellowgreen" placeholder="赶快发表你的见解吧！" name="comment" cols="110" rows="8" aria-required="true"></textarea>
+                  <textarea class="input"  style="color: yellowgreen" placeholder="show your comment！" name="comment" aria-required="true"></textarea>
               </div>
 
               <input type="submit" value="submit">
@@ -130,7 +155,7 @@ body {
   <div class="rightcolumn">
     <div class="card">
       <h2>{{ occupy }}</h2>
-      <img class="fakeimg" style="height: 100px;" src="static/starry.jpg">
+      <img class="fakeimg" style="height: 100px;" src="/static/starry.jpg">
       <p>{{ description }}</p>
     </div>
     <div class="card">
@@ -152,14 +177,16 @@ body {
   </div>
 </div>
 
+
+<section class="footer">
+    {% for i in count %}
+    <a href="{% url 'home' page=i %}">{{ i }}</a>
+    {% endfor %}
+</section>
 <div class="footer">
   <a href="{% url 'logout' %}" >lougout</a>
 </div>
+</body>
 
-</body>
-{% else %}
-<body>
-<a href="{% url 'login' %}"> please click here to login</a>
-</body>
-{% endif %}
+
 </html>

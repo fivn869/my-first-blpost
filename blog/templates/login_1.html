@@ -56,6 +56,10 @@ span.psw {
   float: right;
   padding-top: 16px;
 }
+.error{
+    margin: 0 auto;
+    color: coral;
+}
 
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
@@ -67,27 +71,25 @@ span.psw {
      width: 100%;
   }
 
-  #error{
-      position: center;
-      color: #f44336;
-  }
+
+
 }
 </style>
 </head>
 <body>
 
-<h2>Welcome back!</h2>
+<h2>Welcome !</h2>
 
 <form action="{% url 'login' %}" method="post">{% csrf_token %}
   <div class="imgcontainer">
     <img src="static/Ikaros.jpg" alt="Avatar" class="avatar">
   </div>
-    <div>
+    <div class = "error">
         {% if error %}
-        <p id = "error" >{{ error }}</p>
+        <p>{{ error }}</p>
         {% endif %}
         {% if message %}
-        <p id = "error" >{{ message }}</p>
+        <p>{{ message }}</p>
         {% endif %}
     </div>
   <div class="container">
