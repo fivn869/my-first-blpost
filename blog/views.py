@@ -177,13 +177,14 @@ class HomePage(View):
                 data['occupy'] = des.occupy
             else:
                 data['error'] = 'please fill your own profile'
-            # user_posts = Poost.objects.filter(us=request.user)
-            # user_infos = Profile.objects.filter()
-            # data['infos'] = user_infos
-            # data['posts'] = user_posts
+
+
         numbers = Poost.objects.all().count()
         number_of_pages =int(numbers/4)
         Postsss = Poost.objects.all()
+        if page > (number_of_pages):
+            return redirect('home', page=0)
+
         count = []
         for i in range(0,number_of_pages+1):
             count.append(i);
