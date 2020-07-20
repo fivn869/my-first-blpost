@@ -24,6 +24,7 @@ class Poost(models.Model):
     title = models.CharField(max_length=25)
     blog = models.TextField(max_length=258)
     published_date = models.DateTimeField(blank=True, null=True)
+    click_times = models.IntegerField(default=0)
 
     def publish(self):
         self.published_date =timezone.now()

@@ -6,19 +6,38 @@ from .forms import FileForm,poost as form_post
 from .models import Profile, Poost
 
 
+class PostView(View):
+
+    def get(self, request,pk):
+
+        post=Poost.objects.get(pk=pk)
+        post.click_times+=1
+        post.save()
+        print(post.click_times)
+        return render(request, 'postView.html',{'post':post})
+
+    def post(self, request,pk):
+        pass
+
 
 class PostEdit(View):
 
     TEMPLATE = 'post_edit.html'
 
     def get(self, request, pk):
+
         data = {}
-        print('get')
+
         post = get_object_or_404(Poost, pk=pk)
-        popo = {'post':post.blog, 'title':post.title}
-        data['form'] =form_post(initial=popo)
-        data['pk'] = pk
-        return render(request, self.TEMPLATE, data)
+        if post.us == request.user:
+
+             popo = {'post':post.blog, 'title':post.title}
+             data['form'] =form_post(initial=popo)
+             data['pk'] = pk
+             return render(request, self.TEMPLATE, data)
+        else:
+
+            return redirect('home', page=0)
 
     def post(self, request,pk):
         print('post')
@@ -182,6 +201,9 @@ class HomePage(View):
         numbers = Poost.objects.all().count()
         number_of_pages =int(numbers/4)
         Postsss = Poost.objects.all()
+        click_rank = Poost.objects.all().order_by('click_times').reverse()[:3]
+        print(click_rank)
+        data['rank'] = click_rank
         if page > (number_of_pages):
             return redirect('home', page=0)
 
